@@ -110,6 +110,12 @@ const propmtUser = () => {
 
 const writeMD = (answers) => {
     console.log(answers);
+
+    let {title, description, instructions, usage, license, contributing, tests, github, email} = answers;
+    const fileName = title.toLowerCase().split(" ").join("");
+    fs.writeFile(`${fileName}.md`, generateREADME(answers), (err) =>
+    err ? console.log(err) : console.log(`Sucessfully created ${fileName}.md`)
+    )
 }
 
 const innit = () => {

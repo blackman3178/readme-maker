@@ -1,8 +1,17 @@
 const ask = require("inquirer");
 const fs = require("fs");
+const licenseMap = new Map;
 
-const generateREADME = (answers) => 
+//set values in licenseMap 
+licenseMap.set("MIT", "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)");
+licenseMap.set("Mozilla Public License", "[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)");
+licenseMap.set("Eclipse Public License 1.0", "[![License](https://img.shields.io/badge/License-EPL%201.0-red.svg)](https://opensource.org/licenses/EPL-1.0)" );
+licenseMap.set("SIL Open Font License 1.1","[![License: Open Font-1.1](https://img.shields.io/badge/License-OFL%201.1-lightgreen.svg)](https://opensource.org/licenses/OFL-1.1)");
+licenseMap.set("IBM Public License 1.0", "[![License: IPL 1.0](https://img.shields.io/badge/License-IPL%201.0-blue.svg)](https://opensource.org/licenses/IPL-1.0)");
+
+const generateREADME = (answers, licenseBadge) => 
 `# ${answers.title}
+${licenseBadge}
 
 ## Table of Contents 
 
@@ -23,27 +32,33 @@ const generateREADME = (answers) =>
 
 ## Description
 
-### ${answers.description}
+### -${answers.description}
+
 
 ## Installation
 
-### ${answers.installation}
+### -${answers.installation}
+
 
 ## Usage 
 
-### ${answers.usage}
+### -${answers.usage}
+
 
 ## License 
 
-### ${answers.license}
+### -${answers.license}
+
 
 ## Contributing
 
-### ${answers.contributing}
+### -${answers.contributing}
+
 
 ## Tests
 
-### ${answers.tests}
+### -${answers.tests}
+
 
 ## Questions
 
@@ -80,7 +95,7 @@ const propmtUser = () => {
             type: "list",
             message: "What is the license for this application?",
             name: "license",
-            choices: ["MIT", "Mozilla Public License", "Microsoft Public License", "Apache"]
+            choices: ["MIT", "Mozilla Public License", "Eclipse Public License 1.0", "SIL Open Font License 1.1", "IBM Public License 1.0"]
         },
         {
             type: "input",
@@ -112,8 +127,9 @@ const writeMD = (answers) => {
     console.log(answers);
 
     let {title, description, instructions, usage, license, contributing, tests, github, email} = answers;
+    const licenseBadge = licenseMap.get(license);
     const fileName = title.toLowerCase().split(" ").join("");
-    fs.writeFile(`${fileName}.md`, generateREADME(answers), (err) =>
+    fs.writeFile(`${fileName}.md`, generateREADME(answers,licenseBadge), (err) =>
     err ? console.log(err) : console.log(`Sucessfully created ${fileName}.md`)
     )
 }
